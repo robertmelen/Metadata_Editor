@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-        <div class="text-sm">Uploded Filename:{{ image.filename }}</div>
+        
 </div>
 <div class="container h-25 w-25">
     {% include 'partials/upload_form.html' %}
-        <img _="on load if me.complete transition #prog-bar's width to 0 using 'all 1s ease-in' " src="{{image.image.url}}" class="img-fluid p-2 w-10">
-       <a><button hx-post="{% url 'get_data' %}"
+        <img _="on load if me.complete transition #prog-bar's width to 0 using 'all 1s ease-in' " src="{{image.image.url}}" class="img-fluid pt-5 w-10">
+        <div class="text-sm-start">Uploded Filename:{{ image.filename }}</div>
+       <a><button hx-post="{% url 'get_data' image.pk %}"
                   hx-target="#metadata"       
         type="button" class="btn btn-outline-primary">View Metadata</button>
         </a>
 <div>
+        
         <div id="metadata">
-
+               {% for k, v in test.items %}
+               {% endfor %}
         </div>
        
 {% endblock %}

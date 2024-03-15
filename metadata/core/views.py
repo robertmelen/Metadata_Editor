@@ -13,13 +13,22 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 
+#non Django imports
+import exiftool
 #any @csrf_exempt views must be fixed to except csrf propely
+
+
+def all_data(image_path):
+    with exiftool.ExifToolHelper() as et:
+        return(et.execute_json(image_path,  "-j"))
+
+
 
 
 
 
 #Main page with upload form
-@csrf_exempt
+
 def upload(request):
     if request.htmx:
         form = UploadImageForm(request.POST, request.FILES)
@@ -38,7 +47,7 @@ def upload(request):
 
 #this is handlind returning a HTMX partial with the image
 #it also pushes a new URL rou
-@csrf_exempt
+
 def result(request, image=None):
     if image is not None:
         image_obj = get_object_or_404(Uploaded_Image, pk=image)
@@ -47,8 +56,12 @@ def result(request, image=None):
    
     
     
-@csrf_exempt        
+      
 def get_data(request, image=None):
     if request.htmx:
-        return HttpResponse("hello")
+        image_obj = get_object_or_404(Uploaded_Image, pk=image)
+        get_data = all_data(image_obj.image.path)
+        test = get_data[0]
+        print(test)
+        return render(request, "partials/data.html", {'test': test})
    
